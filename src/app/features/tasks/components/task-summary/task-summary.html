@@ -1,0 +1,14 @@
+<div class="summary">
+  @for (status of statuses; track status.value) {
+    <button
+      type="button"
+      class="card card--{{ status.value }}"
+      [class.card--active]="selected() === status.value"
+      [attr.aria-pressed]="selected() === status.value"
+      (click)="toggle(status.value)"
+    >
+      <span class="card__count">{{ counts()[status.value] }}</span>
+      <span class="card__label">{{ status.label }}</span>
+    </button>
+  }
+</div>

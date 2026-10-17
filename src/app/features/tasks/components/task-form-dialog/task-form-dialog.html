@@ -1,0 +1,95 @@
+<dialog #dialog class="dialog" aria-labelledby="task-form-title" (cancel)="onCancel($event)">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <header class="dialog__header">
+      <h2 id="task-form-title">{{ isEditMode() ? 'עריכת משימה' : 'משימה חדשה' }}</h2>
+      <button type="button" class="btn btn--icon" title="סגירה" (click)="closed.emit()">✕</button>
+    </header>
+
+    <div class="dialog__body">
+      @if (submitted() && form.invalid) {
+        <p class="form-alert" role="alert">יש להשלים את השדות המסומנים לפני השמירה.</p>
+      }
+
+      <label class="field">
+        <span class="field__label">תיאור המשימה <span class="required">*</span></span>
+        <textarea
+          formControlName="description"
+          rows="3"
+          [class.invalid]="isInvalid(form.controls.description)"
+          [attr.maxlength]="descriptionMaxLength"
+        ></textarea>
+        @if (isInvalid(form.controls.description)) {
+          <span class="field__error">
+            @if (form.controls.description.hasError('maxlength')) {
+              התיאור יכול להכיל עד {{ descriptionMaxLength }} תווים
+            } @else {
+              יש להזין תיאור למשימה
+            }
+          </span>
+        }
+      </label>
+
+      <label class="field">
+        <span class="field__label">מבצע המשימה <span class="required">*</span></span>
+        <input
+          type="text"
+          formControlName="assignee"
+          list="assignee-options"
+          autocomplete="off"
+          [class.invalid]="isInvalid(form.controls.assignee)"
+        />
+        <datalist id="assignee-options">
+          @for (name of assignees(); track name) {
+            <option [value]="name"></option>
+          }
+        </datalist>
+        @if (isInvalid(form.controls.assignee)) {
+          <span class="field__error">
+            @if (form.controls.assignee.hasError('maxlength')) {
+              שם המבצע ארוך מדי
+            } @else {
+              יש להזין את מבצע המשימה
+            }
+          </span>
+        }
+      </label>
+
+      <div class="row">
+        <label class="field">
+          <span class="field__label">תאריך יעד <span class="required">*</span></span>
+          <input
+            type="date"
+            formControlName="dueDate"
+            [min]="isEditMode() ? null : minDate"
+            [class.invalid]="isInvalid(form.controls.dueDate)"
+          />
+          @if (isInvalid(form.controls.dueDate)) {
+            <span class="field__error">
+              @if (form.controls.dueDate.hasError('pastDate')) {
+                תאריך היעד לא יכול להיות בעבר
+              } @else {
+                יש לבחור תאריך יעד
+              }
+            </span>
+          }
+        </label>
+
+        <label class="field">
+          <span class="field__label">סטטוס</span>
+          <select formControlName="status">
+            @for (option of statusOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <footer class="dialog__footer">
+      <button type="button" class="btn btn--ghost" (click)="closed.emit()">ביטול</button>
+      <button type="submit" class="btn btn--primary">
+        {{ isEditMode() ? 'שמירת שינויים' : 'הוספת משימה' }}
+      </button>
+    </footer>
+  </form>
+</dialog>

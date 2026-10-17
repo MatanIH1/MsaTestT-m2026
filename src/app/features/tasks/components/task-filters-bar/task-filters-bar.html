@@ -1,0 +1,58 @@
+<div class="filters">
+  <label class="field field--search">
+    <span class="field__label">חיפוש</span>
+    <input
+      #search
+      type="search"
+      placeholder="חיפוש לפי תיאור או מבצע..."
+      [value]="filters().search"
+      (input)="setFilter('search', search.value)"
+    />
+  </label>
+
+  <label class="field">
+    <span class="field__label">מבצע</span>
+    <select #assignee [value]="filters().assignee" (change)="setFilter('assignee', assignee.value)">
+      <option value="">הכל</option>
+      @for (name of assignees(); track name) {
+        <option [value]="name">{{ name }}</option>
+      }
+    </select>
+  </label>
+
+  <label class="field">
+    <span class="field__label">סטטוס</span>
+    <select #status [value]="filters().status" (change)="setStatus(status.value)">
+      <option value="">הכל</option>
+      @for (option of statuses; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+  </label>
+
+  <label class="field">
+    <span class="field__label">תאריך יעד מ-</span>
+    <input
+      #dueFrom
+      type="date"
+      [value]="filters().dueFrom"
+      [max]="filters().dueTo"
+      (change)="setFilter('dueFrom', dueFrom.value)"
+    />
+  </label>
+
+  <label class="field">
+    <span class="field__label">עד</span>
+    <input
+      #dueTo
+      type="date"
+      [value]="filters().dueTo"
+      [min]="filters().dueFrom"
+      (change)="setFilter('dueTo', dueTo.value)"
+    />
+  </label>
+
+  <button type="button" class="btn btn--ghost" [disabled]="!hasActiveFilters()" (click)="clear()">
+    ניקוי סינון
+  </button>
+</div>

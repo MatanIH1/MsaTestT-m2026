@@ -1,0 +1,53 @@
+<section class="page">
+  <header class="page__header">
+    <div>
+      <h1>ניהול משימות</h1>
+      <p class="page__subtitle">מעקב אחר כל המשימות בארגון במקום אחד</p>
+    </div>
+    <button type="button" class="btn btn--primary" (click)="openCreateForm()">+ הוספת משימה</button>
+  </header>
+
+  <app-task-summary
+    [counts]="counts()"
+    [selected]="filters().status"
+    (statusSelect)="filterByStatus($event)"
+  />
+
+  <app-task-filters-bar [(filters)]="filters" [assignees]="assignees()" />
+
+  @if (tasks().length === 0) {
+    <div class="empty-state">
+      <p>עדיין אין משימות במערכת.</p>
+      <button type="button" class="btn btn--primary" (click)="openCreateForm()">
+        יצירת משימה ראשונה
+      </button>
+    </div>
+  } @else if (visibleTasks().length === 0) {
+    <div class="empty-state">
+      <p>לא נמצאו משימות שמתאימות לסינון.</p>
+      <button type="button" class="btn btn--ghost" (click)="clearFilters()">ניקוי סינון</button>
+    </div>
+  } @else {
+    <p class="results-count">מציג {{ visibleTasks().length }} מתוך {{ tasks().length }} משימות</p>
+    <app-task-table
+      [tasks]="visibleTasks()"
+      [today]="today"
+      (statusChange)="onStatusChange($event)"
+      (edit)="openEditForm($event)"
+      (remove)="onRemove($event)"
+    />
+  }
+</section>
+
+@if (isFormOpen()) {
+  <app-task-form-dialog
+    [task]="editedTask()"
+    [assignees]="assignees()"
+    (save)="onSave($event)"
+    (closed)="closeForm()"
+  />
+}
+
+@if (notice(); as message) {
+  <div class="toast" role="status">{{ message }}</div>
+}

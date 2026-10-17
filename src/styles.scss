@@ -1,0 +1,154 @@
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-muted: #f8f9fc;
+  --border: #e3e7ef;
+  --text: #1e2533;
+  --text-muted: #667085;
+  --primary: #2346f5;
+  --primary-hover: #1835c9;
+  --danger: #d92d20;
+
+  --status-in-progress: #2346f5;
+  --status-in-progress-bg: #e8edff;
+  --status-late: #d92d20;
+  --status-late-bg: #fdecea;
+  --status-reported: #b54708;
+  --status-reported-bg: #fff4e0;
+  --status-done: #067647;
+  --status-done-bg: #e3f8ec;
+
+  --radius: 10px;
+  --shadow: 0 4px 14px rgb(30 37 51 / 8%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Heebo', 'Segoe UI', Arial, sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+// ---------- Form fields ----------
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  &__label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  &__error {
+    font-size: 0.8rem;
+    color: var(--danger);
+  }
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: border-color 0.15s;
+
+  &:focus {
+    outline: 2px solid color-mix(in srgb, var(--primary) 25%, transparent);
+    border-color: var(--primary);
+  }
+
+  &.invalid {
+    border-color: var(--danger);
+  }
+}
+
+// ---------- Buttons ----------
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  &--primary {
+    background: var(--primary);
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+  }
+
+  &--ghost {
+    border-color: var(--border);
+    background: var(--surface);
+
+    &:hover:not(:disabled) {
+      background: var(--surface-muted);
+    }
+  }
+
+  &--icon {
+    padding: 0.35rem 0.55rem;
+    color: var(--text-muted);
+
+    &:hover {
+      background: var(--surface-muted);
+      color: var(--text);
+    }
+  }
+
+  &--danger:hover {
+    color: var(--danger);
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

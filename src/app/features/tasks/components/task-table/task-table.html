@@ -1,0 +1,53 @@
+<div class="table-wrapper">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>תיאור המשימה</th>
+        <th>מבצע</th>
+        <th>תאריך יעד</th>
+        <th>סטטוס</th>
+        <th>עדכון סטטוס</th>
+        <th><span class="visually-hidden">פעולות</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (task of tasks(); track task.id) {
+        <!-- The badge shows the displayed status (can be "late"), the select edits the saved one -->
+        @let displayStatus = getDisplayStatus(task, today());
+        <tr [class.row--late]="displayStatus === 'late'" [class.row--done]="task.status === 'done'">
+          <td class="cell-description">{{ task.description }}</td>
+          <td>{{ task.assignee }}</td>
+          <td class="cell-date">{{ task.dueDate | displayDate }}</td>
+          <td><app-status-badge [status]="displayStatus" /></td>
+          <td>
+            <select
+              #statusSelect
+              class="status-select"
+              [attr.aria-label]="'עדכון סטטוס: ' + task.description"
+              (change)="onStatusChange(task, statusSelect.value)"
+            >
+              @for (option of statusOptions; track option.value) {
+                <option [value]="option.value" [selected]="option.value === task.status">
+                  {{ option.label }}
+                </option>
+              }
+            </select>
+          </td>
+          <td class="cell-actions">
+            <button type="button" class="btn btn--icon" title="עריכה" (click)="edit.emit(task)">
+              ✎<span class="visually-hidden">עריכת {{ task.description }}</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn--icon btn--danger"
+              title="מחיקה"
+              (click)="remove.emit(task)"
+            >
+              🗑<span class="visually-hidden">מחיקת {{ task.description }}</span>
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
