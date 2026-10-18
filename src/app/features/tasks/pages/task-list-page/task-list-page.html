@@ -4,7 +4,9 @@
       <h1>ניהול משימות</h1>
       <p class="page__subtitle">מעקב אחר כל המשימות בארגון במקום אחד</p>
     </div>
-    <button type="button" class="btn btn--primary" (click)="openCreateForm()">+ הוספת משימה</button>
+    <button type="button" class="btn btn--primary" (click)="openCreateForm()">
+      הוספת משימה <span aria-hidden="true">+</span>
+    </button>
   </header>
 
   <app-task-summary
